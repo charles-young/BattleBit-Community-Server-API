@@ -75,9 +75,6 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnPlayerConnected(MyPlayer player)
     {
         await Console.Out.WriteLineAsync("Connected: " + player);
-        player.Modifications.CanSpectate = true;
-        player.Modifications.CanDeploy = false;
-
     }
     public override async Task OnPlayerSpawned(MyPlayer player)
     {
