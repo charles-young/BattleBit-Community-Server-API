@@ -1,0 +1,54 @@
+name: Deploy to Windows Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure Known Hosts and SSH Agent
+        run: |
+          mkdir -p ~/.ssh/
+          touch ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval $(ssh-agent)
+          ssh-add ~/.ssh/id_rsa
+
+      - name: Remove old versions
+        run: |
+          echo "Removing old projects..."
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} "if exist "\app" rd /s /q \app"
+          echo "Old projects removed."
+
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Publish
+        run: dotnet publish -c Release -r win-x64 --output ./publish
+
+      - name: Transfer binary to server
+        run: |
+          echo "Transferring code to server..."
+          scp -r ${GITHUB_WORKSPACE}/publish ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/app
+          echo "Code transferred to server."
+
+      - name: Execute deploy script
+        run: |
+          echo "Executing remote command..."
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} "cd \app && deploy.bat"
+          echo "Remote command executed."
