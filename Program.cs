@@ -75,6 +75,8 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnPlayerConnected(MyPlayer player)
     {
         await Console.Out.WriteLineAsync("Connected: " + player);
+        // send message
+         player.Message("Welcome to シSTRANGE_S ∄ ∀ Lシ Server, " + player.Name + "");
     }
     public override async Task OnPlayerSpawned(MyPlayer player)
     {
@@ -83,6 +85,8 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnAPlayerDownedAnotherPlayer(OnPlayerKillArguments<MyPlayer> args)
     {
         await Console.Out.WriteLineAsync("Downed: " + args.Victim);
+        args.Killer.Message("You downed " + args.Victim.Name + " Fucker!");
+        args.Victim.Message("You got abs smoked by" + args.Killer.Name);
     }
     public override async Task OnPlayerGivenUp(MyPlayer player)
     {
@@ -99,5 +103,18 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnPlayerDisconnected(MyPlayer player)
     {
         await Console.Out.WriteLineAsync("Disconnected: " + player);
+    }
+
+    public async Task OnRoundStarted()
+    {
+        var playersList = AllPlayers.ToList();
+        var random = new Random();
+        foreach (var player in playersList)
+        {
+            // now change the players health
+            player.HP = 300;
+            player.Modifications.JumpHeightMultiplier = Single.MaxValue;
+        }
+        
     }
 }
