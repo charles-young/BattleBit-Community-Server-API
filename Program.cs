@@ -36,16 +36,6 @@ class MyPlayer : Player<MyPlayer>
     {
         this.mydb = mydb;
     }
-
-    public override async Task OnConnected()
-    {
-        Console.WriteLine("Spawned ff: ");
-
-        // Set the JumpHeightMultiplier property to adjust the jump height
-        Modifications.JumpHeightMultiplier = 3f; // Adjust the jump height to 1.5 times the default
-        Modifications.RunningSpeedMultiplier = 2f; // Adjust the running speed to 2 times the default
-    }
-    
     
 }
 class MyGameServer : GameServer<MyPlayer>
@@ -90,8 +80,7 @@ class MyGameServer : GameServer<MyPlayer>
     {
         await Console.Out.WriteLineAsync("Spawned: " + player);
         player.Message("Welcome to シSTRANGE_S ∄ ∀ Lシ Server, " + player.Name + "");
-        player.Modifications.JumpHeightMultiplier = 8f;
-        player.Modifications.RunningSpeedMultiplier = 8f; 
+        player.Modifications.JumpHeightMultiplier = 2f;
     }
     public override async Task OnAPlayerDownedAnotherPlayer(OnPlayerKillArguments<MyPlayer> args)
     {
