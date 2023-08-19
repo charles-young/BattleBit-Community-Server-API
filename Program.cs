@@ -37,7 +37,7 @@ class MyPlayer : Player<MyPlayer>
         this.mydb = mydb;
     }
 
-    public override async Task OnSpawned()
+    public override async Task OnConnected()
     {
         Console.WriteLine("Spawned ff: " + this);
 
