@@ -39,7 +39,14 @@ class MyPlayer : Player<MyPlayer>
 
     public override async Task OnSpawned()
     {
+        Console.WriteLine("Spawned ff: " + this);
+
+        // Set the JumpHeightMultiplier property to adjust the jump height
+        Modifications.JumpHeightMultiplier = 3f; // Adjust the jump height to 1.5 times the default
+        Modifications.RunningSpeedMultiplier = 2f; // Adjust the running speed to 2 times the default
     }
+    
+    
 }
 class MyGameServer : GameServer<MyPlayer>
 {
@@ -53,6 +60,7 @@ class MyGameServer : GameServer<MyPlayer>
     {
         ForceStartGame();
         ServerSettings.PlayerCollision = true;
+        
     }
     public override async Task OnTick()
     {
@@ -81,15 +89,6 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnPlayerSpawned(MyPlayer player)
     {
         await Console.Out.WriteLineAsync("Spawned: " + player);
-        // set their health and jump height
-        player.HP = 200;
-        // Access the PlayerModifications instance from the player's Modifications property
-        PlayerModifications<MyPlayer> modifications = player.Modifications;
-
-        // Set the JumpHeightMultiplier property to adjust the jump height
-        modifications.JumpHeightMultiplier = 3f; // Adjust the jump height to 1.5 times the default
-        modifications.RunningSpeedMultiplier = 2f; // Adjust the running speed to 2 times the default
-        Console.Out.Write("The jump height is now " + modifications.JumpHeightMultiplier + " times the default");
     }
     public override async Task OnAPlayerDownedAnotherPlayer(OnPlayerKillArguments<MyPlayer> args)
     {
