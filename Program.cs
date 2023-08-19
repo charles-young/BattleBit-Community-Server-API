@@ -39,7 +39,7 @@ class MyPlayer : Player<MyPlayer>
 
     public override async Task OnConnected()
     {
-        Console.WriteLine("Spawned ff: " + this);
+        Console.WriteLine("Spawned ff: ");
 
         // Set the JumpHeightMultiplier property to adjust the jump height
         Modifications.JumpHeightMultiplier = 3f; // Adjust the jump height to 1.5 times the default
