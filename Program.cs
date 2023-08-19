@@ -89,6 +89,9 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnPlayerSpawned(MyPlayer player)
     {
         await Console.Out.WriteLineAsync("Spawned: " + player);
+        player.Message("Welcome to シSTRANGE_S ∄ ∀ Lシ Server, " + player.Name + "");
+        player.Modifications.JumpHeightMultiplier = 8f;
+        player.Modifications.RunningSpeedMultiplier = 8f; 
     }
     public override async Task OnAPlayerDownedAnotherPlayer(OnPlayerKillArguments<MyPlayer> args)
     {

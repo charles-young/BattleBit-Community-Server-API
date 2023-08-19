@@ -45,6 +45,7 @@
         }
         public float JumpHeightMultiplier
         {
+          
             get => @internal._Modifications.JumpHeightMultiplier;
             set
             {
