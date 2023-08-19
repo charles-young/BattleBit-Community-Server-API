@@ -81,12 +81,21 @@ class MyGameServer : GameServer<MyPlayer>
     public override async Task OnPlayerSpawned(MyPlayer player)
     {
         await Console.Out.WriteLineAsync("Spawned: " + player);
+        // set their health and jump height
+        player.HP = 200;
+        // Access the PlayerModifications instance from the player's Modifications property
+        PlayerModifications<MyPlayer> modifications = player.Modifications;
+
+        // Set the JumpHeightMultiplier property to adjust the jump height
+        modifications.JumpHeightMultiplier = 3f; // Adjust the jump height to 1.5 times the default
+        modifications.RunningSpeedMultiplier = 2f; // Adjust the running speed to 2 times the default
+        Console.Out.Write("The jump height is now " + modifications.JumpHeightMultiplier + " times the default");
     }
     public override async Task OnAPlayerDownedAnotherPlayer(OnPlayerKillArguments<MyPlayer> args)
     {
         await Console.Out.WriteLineAsync("Downed: " + args.Victim);
         args.Killer.Message("You downed " + args.Victim.Name + " Fucker!");
-        args.Victim.Message("You got abs smoked by" + args.Killer.Name);
+        args.Victim.Message("You got abs smoked by " + args.Killer.Name);
     }
     public override async Task OnPlayerGivenUp(MyPlayer player)
     {
@@ -107,14 +116,6 @@ class MyGameServer : GameServer<MyPlayer>
 
     public override async Task OnRoundStarted()
     {
-        var playersList = AllPlayers.ToList();
-        var random = new Random();
-        foreach (var player in playersList)
-        {
-            // now change the players health
-            player.HP = 300;
-            player.Modifications.JumpHeightMultiplier = Single.MaxValue;
-        }
-        
+        Console.Out.Write("The round is now starting");
     }
 }
