@@ -105,7 +105,7 @@ class MyGameServer : GameServer<MyPlayer>
         await Console.Out.WriteLineAsync("Disconnected: " + player);
     }
 
-    public async Task OnRoundStarted()
+    public override async Task OnRoundStarted()
     {
         var playersList = AllPlayers.ToList();
         var random = new Random();
